@@ -9,30 +9,42 @@
 */
 void radix_sort(int *array, size_t size)
 {
-	int i, tmp, compare, *radix;
+	int i, max = 0, factor = 1;
+	int *count = NULL, *output = NULL;
 
-	if (!array || size <= 0)
-		return;
-	for(i = 0; i < (int)size; i++)
-	{
-		if ((array[i] % 10) > (array[i + 1] % 10))
-		{
-			tmp = array[i];
-			array[i] = array[i + 1];
-			array[i + 1] = tmp;
-		}
-	}
-	compare = array[size - 1];
-	print_array(array, size);
-	radix = malloc(sizeof(int) * size);
-	if (radix == NULL)
+	if (!array || size <= 1)
 		return;
 	for (i = 0; i < (int)size; i++)
-		radix[i] = (array[i] / 10);
-	if (compare / 10 == 0)
 	{
-		free(radix);
-		return;
+		if (array[i] > max)
+		max = array[i];
 	}
-	radix_sort(radix, size);
+	while (max / factor > 0)
+	{
+		count = malloc(10 * sizeof(int));
+		output = malloc(size * sizeof(int));
+		if (!count || !output)
+		{
+			free(count);
+			free(output);
+			return;
+		}
+		for (i = 0; i < 10; i++)
+			count[i] = 0;
+		for (i = 0; i < (int)size; i++)
+			count[(array[i] / factor) % 10]++;
+		for (i = 1; i < 10; i++)
+			count[i] += count[i - 1];
+		for (i = size - 1; i >= 0; i--)
+		{
+			output[count[(array[i] / factor) % 10] - 1] = array[i];
+			count[(array[i] / factor) % 10]--;
+		}
+		for (i = 0; i < (int)size; i++)
+			array[i] = output[i];
+		print_array(array, size);
+		factor *= 10;
+		free(count);
+		free(output);
+	}
 }
