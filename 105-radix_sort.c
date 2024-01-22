@@ -21,7 +21,7 @@ void radix_sort(int *array, size_t size)
 	}
 	while (max / factor > 0)
 	{
-		count = malloc(size * sizeof(int));
+		count = malloc10( * sizeof(int));
 		output = malloc(size * sizeof(int));
 		if (!count || !output)
 		{
@@ -29,11 +29,11 @@ void radix_sort(int *array, size_t size)
 			free(output);
 			return;
 		}
-		for (i = 0; i < (int)size; i++)
+		for (i = 0; i < 10; i++)
 			count[i] = 0;
 		for (i = 0; i < (int)size; i++)
 			count[(array[i] / factor) % 10]++;
-		for (i = 1; i < (int)size; i++)
+		for (i = 1; i < 10; i++)
 			count[i] += count[i - 1];
 		for (i = size - 1; i >= 0; i--)
 		{
